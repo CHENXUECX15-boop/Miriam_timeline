@@ -1,6 +1,4 @@
-# 早日成为富婆
-
-work for tomorrow.
+# work for tomorrow.
 
 这是一个个人主理人工作台静态网页原型，入口文件为 `index.html`。
 

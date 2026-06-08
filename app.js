@@ -76,7 +76,6 @@ const i18nTextMemory = new WeakMap();
 
 const zhToEn = {
   "主导航": "Main navigation",
-  "早日成为富婆": "Early Rich Woman",
   "今日总览": "Today",
   "工作节奏": "Rhythm",
   "任务看板": "Tasks",
@@ -392,7 +391,7 @@ const zhToEn = {
 
 const enToDe = {
   "Main navigation": "Hauptnavigation",
-  "Early Rich Woman": "Früh reich werden",
+  "work for tomorrow.": "work for tomorrow.",
   "Today": "Heute",
   "Rhythm": "Rhythmus",
   "Tasks": "Aufgaben",
@@ -739,14 +738,14 @@ const languageMeta = {
   en: {
     htmlLang: "en",
     locale: "en-US",
-    title: "Early Rich Woman | work for tomorrow.",
-    exportName: "early-rich-woman"
+    title: "work for tomorrow.",
+    exportName: "work-for-tomorrow"
   },
   de: {
     htmlLang: "de",
     locale: "de-DE",
-    title: "Früh reich werden | work for tomorrow.",
-    exportName: "frueh-reich-werden"
+    title: "work for tomorrow.",
+    exportName: "work-for-tomorrow"
   }
 };
 const sourceByTranslation = Object.entries(languageDictionaries).reduce((lookup, [, dictionary]) => {
