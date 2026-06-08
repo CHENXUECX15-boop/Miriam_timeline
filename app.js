@@ -56,20 +56,20 @@ const DAY_PLAN_ROW_AXIS_HOURS = Array.from({ length: DAY_PLAN_ROW_HOURS / 2 + 1 
 const DEFAULT_THEME = "mono-black";
 
 const themeOptions = [
-  { id: "mono-black", name: "简约黑色", nameEn: "Minimal Black", note: "默认", noteEn: "Default", colors: ["#111111", "#f7f7f4", "#d6d6d0"] },
-  { id: "colored-cat", name: "彩色猫猫", nameEn: "Colorful Cat", note: "当前风格", noteEn: "Current style", colors: ["#0b7c77", "#ef6f61", "#eff6f5"] },
-  { id: "line-cat", name: "线条猫猫", nameEn: "Line Cat", note: "黑白线稿", noteEn: "Line-art", colors: ["#1b1b1b", "#ffffff", "#e7e7e2"] },
-  { id: "dopamine", name: "多巴胺配色", nameEn: "Dopamine", note: "夏日高饱和", noteEn: "Bright palette", colors: ["#42bfdf", "#bbdefa", "#fec2dc", "#9ce9e4"] },
-  { id: "mono-red", name: "单色红色", nameEn: "Mono Red", note: "清晰醒目", noteEn: "Bold", colors: ["#c53b31", "#fff5f3", "#f7d8d3"] },
-  { id: "mono-yellow", name: "单色黄色", nameEn: "Mono Yellow", note: "明亮轻快", noteEn: "Bright", colors: ["#c3841d", "#fff9e6", "#f4d982"] },
-  { id: "mono-green", name: "单色绿色", nameEn: "Mono Green", note: "稳定舒展", noteEn: "Calm", colors: ["#2f7d5b", "#f0f7f2", "#cfe8d8"] }
+  { id: "mono-black", name: "简约黑色", nameEn: "Minimal Black", nameDe: "Minimal Schwarz", note: "默认", noteEn: "Default", noteDe: "Standard", colors: ["#111111", "#f7f7f4", "#d6d6d0"] },
+  { id: "colored-cat", name: "彩色猫猫", nameEn: "Colorful Cat", nameDe: "Bunte Katze", note: "当前风格", noteEn: "Current style", noteDe: "Aktueller Stil", colors: ["#0b7c77", "#ef6f61", "#eff6f5"] },
+  { id: "line-cat", name: "线条猫猫", nameEn: "Line Cat", nameDe: "Linienkatze", note: "黑白线稿", noteEn: "Line-art", noteDe: "Linienzeichnung", colors: ["#1b1b1b", "#ffffff", "#e7e7e2"] },
+  { id: "dopamine", name: "多巴胺配色", nameEn: "Dopamine", nameDe: "Dopamin", note: "夏日高饱和", noteEn: "Bright palette", noteDe: "Helle Palette", colors: ["#42bfdf", "#bbdefa", "#fec2dc", "#9ce9e4"] },
+  { id: "mono-red", name: "单色红色", nameEn: "Mono Red", nameDe: "Mono Rot", note: "清晰醒目", noteEn: "Bold", noteDe: "Kräftig", colors: ["#c53b31", "#fff5f3", "#f7d8d3"] },
+  { id: "mono-yellow", name: "单色黄色", nameEn: "Mono Yellow", nameDe: "Mono Gelb", note: "明亮轻快", noteEn: "Bright", noteDe: "Hell", colors: ["#c3841d", "#fff9e6", "#f4d982"] },
+  { id: "mono-green", name: "单色绿色", nameEn: "Mono Green", nameDe: "Mono Grün", note: "稳定舒展", noteEn: "Calm", noteDe: "Ruhig", colors: ["#2f7d5b", "#f0f7f2", "#cfe8d8"] }
 ];
 
 const validThemeIds = new Set(themeOptions.map((theme) => theme.id));
-const DEFAULT_LANGUAGE = "zh";
+const DEFAULT_LANGUAGE = "en";
 const languageOptions = [
-  { id: "zh", name: "中文", nameEn: "Chinese", note: "简体中文", noteEn: "Simplified Chinese" },
-  { id: "en", name: "English", nameEn: "English", note: "英文界面", noteEn: "English UI" }
+  { id: "en", name: "English", shortName: "EN", note: "English UI" },
+  { id: "de", name: "Deutsch", shortName: "DE", note: "Deutsche Oberfläche" }
 ];
 const validLanguageIds = new Set(languageOptions.map((language) => language.id));
 const i18nTextMemory = new WeakMap();
@@ -387,11 +387,374 @@ const zhToEn = {
   "JSON 已导出": "JSON exported",
   "数据已导入": "Data imported",
   "导入失败，请检查 JSON 文件": "Import failed. Check the JSON file",
-  "已重置为演示数据": "Demo data reset",
-  "语言已切换为中文": "Language switched to Chinese"
+  "已重置为演示数据": "Demo data reset"
 };
 
-const enToZh = Object.fromEntries(Object.entries(zhToEn).map(([zh, en]) => [en, zh]));
+const enToDe = {
+  "Main navigation": "Hauptnavigation",
+  "Early Rich Woman": "Früh reich werden",
+  "Today": "Heute",
+  "Rhythm": "Rhythmus",
+  "Tasks": "Aufgaben",
+  "OKR & Projects": "OKR & Projekte",
+  "Timetable": "Zeitplan",
+  "Meetings": "Besprechungen",
+  "Review": "Rückblick",
+  "Analytics": "Analysen",
+  "Data": "Daten",
+  "Snapshot": "Momentaufnahme",
+  "Focus": "Fokus",
+  "Not recorded": "Nicht erfasst",
+  "Owner Mode · Workspace": "Owner-Modus · Arbeitsbereich",
+  "Put today's progress, tasks, and reviews on one screen": "Fortschritt, Aufgaben und Rückblick von heute auf einem Bildschirm",
+  "For self-directed owners, project leads, and freelancers who want work sessions, focus, tasks, meetings, reviews, and data in one place.": "Für eigenständig arbeitende Owner, Projektverantwortliche und Freelancer, die Arbeitsphasen, Fokus, Aufgaben, Besprechungen, Rückblicke und Daten an einem Ort bündeln möchten.",
+  "Start Work": "Arbeit starten",
+  "New Task": "Neue Aufgabe",
+  "Write Review": "Rückblick schreiben",
+  "Live Work Card": "Live-Arbeitskarte",
+  "Not started": "Nicht gestartet",
+  "Key Task": "Wichtigste Aufgabe",
+  "No key task": "Keine wichtigste Aufgabe",
+  "Add from task board": "Aus Aufgabenboard hinzufügen",
+  "Next Meeting": "Nächste Besprechung",
+  "No meetings": "Keine Besprechungen",
+  "Record in meetings": "In Besprechungen erfassen",
+  "OKR Avg": "OKR-Durchschnitt",
+  "Log Meeting": "Besprechung erfassen",
+  "Status": "Status",
+  "Work not started": "Arbeit noch nicht gestartet",
+  "Ready": "Bereit",
+  "Start": "Start",
+  "End": "Ende",
+  "Active Rest": "Aktive Pause",
+  "Recovery": "Erholung",
+  "Rhythm Reset": "Rhythmus zurücksetzen",
+  "Out of Office": "Außer Haus",
+  "Rest": "Pause",
+  "Work Time": "Arbeitszeit",
+  "Focus Time": "Fokuszeit",
+  "Done Tasks": "Erledigte Aufgaben",
+  "Meeting Notes": "Besprechungsnotizen",
+  "Execution": "Umsetzung",
+  "Priorities, active work, and due tasks": "Prioritäten, laufende Arbeit und fällige Aufgaben",
+  "All unfinished tasks from the task board": "Alle offenen Aufgaben aus dem Aufgabenboard",
+  "Open tasks": "Aufgaben öffnen",
+  "Quick task, e.g. add weekly report risks": "Schnelle Aufgabe, z. B. Risiken im Wochenbericht ergänzen",
+  "Add": "Hinzufügen",
+  "Timeline": "Zeitleiste",
+  "Work sessions, meetings, and focus blocks": "Arbeitsphasen, Besprechungen und Fokusblöcke",
+  "Open rhythm": "Rhythmus öffnen",
+  "Overview": "Übersicht",
+  "Core modules for self-directed work": "Kernmodule für selbstgesteuertes Arbeiten",
+  "Task Flow": "Aufgabenfluss",
+  "Close Open Work": "Offene Arbeit schließen",
+  "Clear Rest": "Pausen löschen",
+  "Focus Timer": "Fokustimer",
+  "Flows into analytics with tasks and work sessions": "Fließt mit Aufgaben und Arbeitsphasen in die Analysen ein",
+  "Set targets, rewards, and focus history": "Ziele, Belohnungen und Fokusverlauf festlegen",
+  "Focus topic, e.g. organize customer issues": "Fokusthema, z. B. Kundenprobleme ordnen",
+  "Target Minutes": "Zielminuten",
+  "Reward": "Belohnung",
+  "E.g. have a favorite coffee": "Z. B. Lieblingskaffee trinken",
+  "Target 25 min": "Ziel 25 Min.",
+  "Reward yourself after completion": "Belohne dich nach Abschluss",
+  "Pause": "Pausieren",
+  "Complete": "Abschließen",
+  "Reset": "Zurücksetzen",
+  "Focus History": "Fokusverlauf",
+  "Completed focus sessions by date": "Abgeschlossene Fokussitzungen nach Datum",
+  "Activity Log": "Aktivitätsprotokoll",
+  "Start, end, rest, and outings": "Start, Ende, Pausen und Ausgänge",
+  "0 tasks": "0 Aufgaben",
+  "Task name": "Aufgabenname",
+  "Today's Tasks": "Heutige Aufgaben",
+  "Previous Tasks": "Frühere Aufgaben",
+  "Add Today": "Heute hinzufügen",
+  "High priority": "Hohe Priorität",
+  "Medium priority": "Mittlere Priorität",
+  "Low priority": "Niedrige Priorität",
+  "Project": "Projekt",
+  "24-Hour Timetable": "24-Stunden-Zeitplan",
+  "Minimum step is 10 minutes. Edit a full day manually.": "Kleinste Einheit sind 10 Minuten. Bearbeite den ganzen Tag manuell.",
+  "Activity name": "Aktivitätsname",
+  "Choose category": "Kategorie wählen",
+  "Start time": "Startzeit",
+  "End time": "Endzeit",
+  "Save Time Block": "Zeitblock speichern",
+  "Cancel Edit": "Bearbeitung abbrechen",
+  "Add, edit, or delete time blocks in 10-minute increments. Overlaps are shown on separate rows.": "Zeitblöcke in 10-Minuten-Schritten hinzufügen, bearbeiten oder löschen. Überlappungen werden in getrennten Zeilen angezeigt.",
+  "Click a block or the edit button in details to modify it.": "Klicke auf einen Block oder den Bearbeiten-Button in den Details, um ihn zu ändern.",
+  "Count Up": "Hochzählen",
+  "No time block selected": "Kein Zeitblock ausgewählt",
+  "This session will be saved to the linked block": "Diese Sitzung wird im verknüpften Block gespeichert",
+  "Enter an activity to start timing": "Aktivität eingeben, um die Zeitmessung zu starten",
+  "Enter an activity and category. When finished, it will be added to the 24-hour timetable.": "Aktivität und Kategorie eingeben. Nach Abschluss wird sie dem 24-Stunden-Zeitplan hinzugefügt.",
+  "Ready to add to timetable": "Bereit zum Hinzufügen zum Zeitplan",
+  "Start Timer": "Timer starten",
+  "Pause Timer": "Timer pausieren",
+  "Finish & Save": "Abschließen & speichern",
+  "Reset Timer": "Timer zurücksetzen",
+  "Timer": "Timer",
+  "Timing": "Zeit läuft",
+  "Selected": "Ausgewählt",
+  "Session": "Sitzung",
+  "Session Time": "Sitzungszeit",
+  "Tracked": "Erfasst",
+  "Timed activity added to timetable": "Zeitgemessene Aktivität zum Zeitplan hinzugefügt",
+  "Enter an activity name first": "Bitte zuerst einen Aktivitätsnamen eingeben",
+  "Select a time block or enter an activity name first": "Bitte zuerst einen Zeitblock auswählen oder eine Aktivität eingeben",
+  "Finish or reset the current timer first": "Bitte zuerst den aktuellen Timer abschließen oder zurücksetzen",
+  "Time Details": "Zeitdetails",
+  "Start, end, activity, and duration": "Start, Ende, Aktivität und Dauer",
+  "Timetable History": "Zeitplanverlauf",
+  "Previous records grouped by date": "Frühere Einträge nach Datum gruppiert",
+  "No timetable history yet": "Noch kein Zeitplanverlauf",
+  "blocks": "Blöcke",
+  "Time": "Zeit",
+  "Activity": "Aktivität",
+  "Category": "Kategorie",
+  "Duration": "Dauer",
+  "Unplanned": "Ungeplant",
+  "Sleep": "Schlaf",
+  "Slow wake-up": "Langsam aufwachen",
+  "Nap": "Mittagsschlaf",
+  "Prep": "Vorbereitung",
+  "Morning prep": "Morgenroutine",
+  "Wind down": "Abschließen",
+  "Tidy room": "Zimmer aufräumen",
+  "Commute": "Pendeln",
+  "In transit": "Unterwegs",
+  "Walking transfer": "Zu Fuß wechseln",
+  "Deep work": "Deep Work",
+  "Project work": "Projektarbeit",
+  "Email & messages": "E-Mail & Nachrichten",
+  "Document work": "Dokumentenarbeit",
+  "Client sync": "Kundenabstimmung",
+  "Requirement check": "Anforderungsprüfung",
+  "Meals": "Mahlzeiten",
+  "Breakfast": "Frühstück",
+  "Lunch": "Mittagessen",
+  "Dinner": "Abendessen",
+  "Coffee break": "Kaffeepause",
+  "Recovery walk": "Erholungsspaziergang",
+  "Blank space": "Leerlauf",
+  "Life": "Leben",
+  "Chores": "Haushalt",
+  "Errands": "Besorgungen",
+  "Exercise": "Sport",
+  "Friends & family": "Freunde & Familie",
+  "Growth": "Wachstum",
+  "Learning": "Lernen",
+  "Reading": "Lesen",
+  "Review planning": "Rückblick planen",
+  "Leisure": "Freizeit",
+  "Relaxing": "Entspannen",
+  "Watch shows": "Serien schauen",
+  "Free time": "Freie Zeit",
+  "New Objective": "Neues Ziel",
+  "Personal OKR": "Persönliches OKR",
+  "Objectives, key results, and progress": "Ziele, Schlüsselergebnisse und Fortschritt",
+  "Project Portfolio": "Projektportfolio",
+  "Role, risk, and next step": "Rolle, Risiko und nächster Schritt",
+  "New Project": "Neues Projekt",
+  "Decisions, action items, and owners": "Entscheidungen, Aufgaben und Verantwortliche",
+  "Meeting topic": "Besprechungsthema",
+  "Client": "Kunde",
+  "Weekly": "Wöchentlich",
+  "Frequent contacts, e.g. Alex / Product Lee": "Häufige Kontakte, z. B. Alex / Product Lee",
+  "Add Contact": "Kontakt hinzufügen",
+  "Frequent meeting contacts": "Häufige Besprechungskontakte",
+  "Key decisions": "Zentrale Entscheidungen",
+  "Action items, comma-separated": "Aufgaben, durch Kommas getrennt",
+  "Save Meeting": "Besprechung speichern",
+  "Collaboration Log": "Zusammenarbeitsprotokoll",
+  "Recent meetings and follow-ups": "Aktuelle Besprechungen und Follow-ups",
+  "Today's Closure": "Heutiger Abschluss",
+  "Wins, risks, and tomorrow's priorities": "Erfolge, Risiken und morgige Prioritäten",
+  "What did you complete today?": "Was hast du heute abgeschlossen?",
+  "What needs attention?": "Was braucht Aufmerksamkeit?",
+  "Top 1-3 things tomorrow": "Die 1-3 wichtigsten Dinge morgen",
+  "Today's mood": "Heutige Stimmung",
+  "Very Unhappy": "Sehr unzufrieden",
+  "Unhappy": "Unzufrieden",
+  "Neutral": "Neutral",
+  "Happy": "Zufrieden",
+  "Very Happy": "Sehr zufrieden",
+  "Reason": "Grund",
+  "Write the reason so you can review the trigger later": "Schreibe den Grund auf, damit du den Auslöser später prüfen kannst",
+  "Save Review": "Rückblick speichern",
+  "Save Changes": "Änderungen speichern",
+  "Review Log": "Rückblickprotokoll",
+  "Keep a daily work trail you can revisit": "Tagesverlauf zur späteren Ansicht behalten",
+  "Data range": "Datenbereich",
+  "7 days": "7 Tage",
+  "14 days": "14 Tage",
+  "30 days": "30 Tage",
+  "Work Trend": "Arbeitstrend",
+  "Work time, focus time, and completed tasks": "Arbeitszeit, Fokuszeit und erledigte Aufgaben",
+  "Work time and focus time": "Arbeitszeit und Fokuszeit",
+  "Task Distribution": "Aufgabenverteilung",
+  "To do, in progress, and done": "Offen, in Arbeit und erledigt",
+  "Theme": "Design",
+  "Current theme: ": "Aktuelles Design: ",
+  "Language": "Sprache",
+  "Current language: ": "Aktuelle Sprache: ",
+  "Language selection": "Sprachauswahl",
+  "Local Data": "Lokale Daten",
+  "Export, import, and reset": "Exportieren, importieren und zurücksetzen",
+  "Export JSON": "JSON exportieren",
+  "Import JSON": "JSON importieren",
+  "Reset Demo Data": "Demodaten zurücksetzen",
+  "Exported content appears here": "Exportierte Inhalte erscheinen hier",
+  "No tasks": "Keine Aufgaben",
+  "No OKRs": "Keine OKRs",
+  "No meeting records": "Keine Besprechungsprotokolle",
+  "No review records": "Keine Rückblicke",
+  "No activity records": "Keine Aktivitätsprotokolle",
+  "No key tasks today": "Heute keine wichtigsten Aufgaben",
+  "No unfinished tasks": "Keine offenen Aufgaben",
+  "No timeline blocks today": "Heute keine Zeitblöcke",
+  "Completed focus sessions will appear here": "Abgeschlossene Fokussitzungen erscheinen hier",
+  "To Do": "Offen",
+  "In Progress": "In Arbeit",
+  "Done": "Erledigt",
+  "Paused": "Pausiert",
+  "Green": "Grün",
+  "Yellow": "Gelb",
+  "Blue": "Blau",
+  "Mood": "Stimmung",
+  "Work": "Arbeit",
+  "Stress": "Stress",
+  "Total tasks": "Aufgaben gesamt",
+  "Untitled focus": "Unbenannter Fokus",
+  "No target": "Kein Ziel",
+  "Previous": "Zurück",
+  "Next": "Weiter",
+  "Delete": "Löschen",
+  "Edit": "Bearbeiten",
+  "Edit review": "Rückblick bearbeiten",
+  "Actions": "Aktionen",
+  "Delete focus record": "Fokusdatensatz löschen",
+  "Delete activity record": "Aktivitätsdatensatz löschen",
+  "Work record": "Arbeitsdatensatz",
+  "Rest / out-of-office": "Pause / außer Haus",
+  "Auto close": "Automatisch schließen",
+  "Auto end": "Automatisches Ende",
+  "Please enter a meeting topic": "Bitte Besprechungsthema eingeben",
+  "Meeting saved": "Besprechung gespeichert",
+  "Review saved": "Rückblick gespeichert",
+  "Start recorded": "Start erfasst",
+  "End recorded": "Ende erfasst",
+  "Rest record added": "Pauseneintrag hinzugefügt",
+  "No open work session today": "Heute keine offene Arbeitsphase",
+  "Open work session closed": "Offene Arbeitsphase geschlossen",
+  "Today's rest records cleared": "Heutige Pauseneinträge gelöscht",
+  "Focus timer is already running": "Fokustimer läuft bereits",
+  "Focus started": "Fokus gestartet",
+  "No active focus session": "Keine aktive Fokussitzung",
+  "Focus paused": "Fokus pausiert",
+  "Focus was too short to record": "Fokus war zu kurz zum Erfassen",
+  "Focus completed": "Fokus abgeschlossen",
+  "Focus timer reset": "Fokustimer zurückgesetzt",
+  "Please enter a contact": "Bitte Kontakt eingeben",
+  "This contact already exists": "Dieser Kontakt existiert bereits",
+  "Contact added": "Kontakt hinzugefügt",
+  "Frequent contact deleted": "Häufiger Kontakt gelöscht",
+  "Please enter a task name": "Bitte Aufgabenname eingeben",
+  "Task added": "Aufgabe hinzugefügt",
+  "Task updated": "Aufgabe aktualisiert",
+  "Task deleted": "Aufgabe gelöscht",
+  "Task status updated": "Aufgabenstatus aktualisiert",
+  "Added to today's tasks": "Zu heutigen Aufgaben hinzugefügt",
+  "OKR added": "OKR hinzugefügt",
+  "OKR deleted": "OKR gelöscht",
+  "Project added": "Projekt hinzugefügt",
+  "Project deleted": "Projekt gelöscht",
+  "Activity deleted": "Aktivität gelöscht",
+  "Focus record deleted": "Fokusdatensatz gelöscht",
+  "Meeting deleted": "Besprechung gelöscht",
+  "Review deleted": "Rückblick gelöscht",
+  "Review updated": "Rückblick aktualisiert",
+  "Please enter an activity name": "Bitte Aktivitätsname eingeben",
+  "End time must be later than start time": "Endzeit muss nach der Startzeit liegen",
+  "Time block saved": "Zeitblock gespeichert",
+  "Time block deleted": "Zeitblock gelöscht",
+  "Edit mode enabled": "Bearbeitungsmodus aktiviert",
+  "Review edit mode enabled": "Rückblick-Bearbeitungsmodus aktiviert",
+  "Timer started": "Timer gestartet",
+  "Timer paused": "Timer pausiert",
+  "Timer reset": "Timer zurückgesetzt",
+  "Timer saved to timetable": "Timer im Zeitplan gespeichert",
+  "Select a time block first": "Bitte zuerst einen Zeitblock auswählen",
+  "Finish the current timer first": "Bitte zuerst den aktuellen Timer abschließen",
+  "Timer was too short": "Timer war zu kurz",
+  "JSON exported": "JSON exportiert",
+  "Data imported": "Daten importiert",
+  "Import failed. Check the JSON file": "Import fehlgeschlagen. JSON-Datei prüfen",
+  "Demo data reset": "Demodaten zurückgesetzt",
+  "Language switched to English": "Sprache auf Englisch umgestellt",
+  "Language switched to German": "Sprache auf Deutsch umgestellt",
+  "Theme switched to ": "Design gewechselt zu ",
+  "Work session active": "Arbeitsphase läuft",
+  "Work recorded today": "Heute wurde Arbeit erfasst",
+  "Reward unlocked": "Belohnung freigeschaltet",
+  "Reward locked": "Belohnung gesperrt",
+  "Work session": "Arbeitsphase",
+  "Due": "Fällig",
+  "No due date": "Kein Fälligkeitsdatum",
+  "Delete meeting": "Besprechung löschen",
+  "No decision": "Keine Entscheidung",
+  "Contact: ": "Kontakt: ",
+  "Delete frequent contact": "Häufigen Kontakt löschen",
+  "Add frequent contacts to select them quickly": "Füge häufige Kontakte hinzu, um sie schnell auszuwählen",
+  "Delete review": "Rückblick löschen",
+  "Wins: ": "Erfolge: ",
+  "Risks: ": "Risiken: ",
+  "Tomorrow: ": "Morgen: ",
+  "Reason: ": "Grund: ",
+  "None": "Keine",
+  "Objective name": "Zielname",
+  "Key result": "Schlüsselergebnis",
+  "Describe a measurable result": "Beschreibe ein messbares Ergebnis",
+  "Project name": "Projektname",
+  "Your role": "Deine Rolle",
+  "Owner": "Owner",
+  "Current risk": "Aktuelles Risiko",
+  "Next action": "Nächste Aktion",
+  "Add next step": "Nächsten Schritt hinzufügen",
+  "Reset demo data? Current local data will be overwritten.": "Demodaten zurücksetzen? Aktuelle lokale Daten werden überschrieben.",
+  "Goal reached. Reward yourself: ": "Ziel erreicht. Belohne dich: ",
+  "Goal reached. Remember your reward": "Ziel erreicht. Denk an deine Belohnung",
+  "Focus saved. Target of ": "Fokus gespeichert. Ziel von ",
+  " min was not reached": " Min. wurde nicht erreicht",
+  "Why are you especially happy today?": "Warum bist du heute besonders zufrieden?",
+  "Why are you especially unhappy today?": "Warum bist du heute besonders unzufrieden?",
+  "Record the trigger that made you happy": "Notiere den Auslöser, der dich zufrieden gemacht hat",
+  "Record the trigger that felt uncomfortable": "Notiere den Auslöser, der sich unangenehm angefühlt hat"
+};
+
+const zhToDe = Object.fromEntries(Object.entries(zhToEn).map(([source, english]) => [source, enToDe[english] || english]));
+const languageDictionaries = { en: zhToEn, de: zhToDe };
+const languageMeta = {
+  en: {
+    htmlLang: "en",
+    locale: "en-US",
+    title: "Early Rich Woman | work for tomorrow.",
+    exportName: "early-rich-woman"
+  },
+  de: {
+    htmlLang: "de",
+    locale: "de-DE",
+    title: "Früh reich werden | work for tomorrow.",
+    exportName: "frueh-reich-werden"
+  }
+};
+const sourceByTranslation = Object.entries(languageDictionaries).reduce((lookup, [, dictionary]) => {
+  Object.entries(dictionary).forEach(([source, translated]) => {
+    if (!lookup[translated]) lookup[translated] = source;
+  });
+  return lookup;
+}, {});
 
 let state = loadState();
 let activeSection = "home";
@@ -890,7 +1253,7 @@ function clearTodayLeaves() {
 function startFocus() {
   const timer = state.focusTimer;
   if (timer.running) return toast("专注计时已在进行");
-  timer.title = $("#focusTitle").value.trim() || timer.title || (isEnglish() ? "Untitled focus" : "未命名专注");
+  timer.title = $("#focusTitle").value.trim() || timer.title || uiText("Untitled focus");
   timer.targetMinutes = clampFocusTarget($("#focusTargetMinutes").value);
   timer.reward = $("#focusReward").value.trim();
   timer.startedAt = iso(new Date());
@@ -915,7 +1278,7 @@ function finishFocus() {
   const endedAt = new Date();
   state.focusSessions.unshift({
     id: uid(),
-    title: timer.title || $("#focusTitle").value.trim() || (isEnglish() ? "Untitled focus" : "未命名专注"),
+    title: timer.title || $("#focusTitle").value.trim() || uiText("Untitled focus"),
     minutes,
     targetMinutes: timer.targetMinutes || clampFocusTarget($("#focusTargetMinutes").value),
     reward: timer.reward || $("#focusReward").value.trim(),
@@ -927,11 +1290,11 @@ function finishFocus() {
   state.focusTimer = { title: "", running: false, startedAt: null, elapsedMs: 0, targetMinutes: latest.targetMinutes || 25, reward: latest.reward || "" };
   $("#focusTitle").value = "";
   if (latest.rewardEarned && latest.reward) {
-    saveAndRender(isEnglish() ? `Goal reached. Reward yourself: ${latest.reward}` : `目标达成，奖励自己：${latest.reward}`);
+    saveAndRender(`${uiText("Goal reached. Reward yourself: ")}${latest.reward}`);
   } else if (latest.rewardEarned) {
-    saveAndRender(isEnglish() ? "Goal reached. Remember your reward" : "目标达成，记得兑现给自己的奖励");
+    saveAndRender(uiText("Goal reached. Remember your reward"));
   } else if (latest.targetMinutes) {
-    saveAndRender(isEnglish() ? `Focus saved. Target of ${latest.targetMinutes} min was not reached` : `专注已保存，本次未达成 ${latest.targetMinutes} 分钟目标`);
+    saveAndRender(`${uiText("Focus saved. Target of ")}${latest.targetMinutes}${uiText(" min was not reached")}`);
   } else {
     saveAndRender("专注已完成");
   }
@@ -1002,11 +1365,11 @@ function setReviewMood(score, reason = null) {
 
   if (needsReason) {
     reasonLabel.textContent = safeScore === 5
-      ? (isEnglish() ? "Why are you especially happy today?" : "为什么今天特别高兴？")
-      : (isEnglish() ? "Why are you especially unhappy today?" : "为什么今天特别不高兴？");
+      ? uiText("Why are you especially happy today?")
+      : uiText("Why are you especially unhappy today?");
     reasonInput.placeholder = safeScore === 5
-      ? (isEnglish() ? "Record the trigger that made you happy" : "记录让你很开心的触发点")
-      : (isEnglish() ? "Record the trigger that felt uncomfortable" : "记录让你不舒服的触发点");
+      ? uiText("Record the trigger that made you happy")
+      : uiText("Record the trigger that felt uncomfortable");
     if (reason !== null) reasonInput.value = reason;
   } else {
     reasonInput.value = "";
@@ -1415,9 +1778,9 @@ function insertDaySegment(newSegment, replaceId = null) {
 }
 
 function addObjective() {
-  const title = window.prompt(isEnglish() ? "Objective name" : "目标名称");
+  const title = window.prompt(uiText("Objective name"));
   if (!title) return;
-  const keyResult = window.prompt(isEnglish() ? "Key result" : "关键结果", isEnglish() ? "Describe a measurable result" : "用一个可衡量结果描述完成标准") || "";
+  const keyResult = window.prompt(uiText("Key result"), uiText("Describe a measurable result")) || "";
   state.okrs.unshift({ id: uid(), title: title.trim(), keyResult: keyResult.trim(), progress: 0 });
   saveAndRender("OKR 已新增");
 }
@@ -1455,11 +1818,11 @@ function handleOkrDelete(event) {
 }
 
 function addProject() {
-  const name = window.prompt(isEnglish() ? "Project name" : "项目名称");
+  const name = window.prompt(uiText("Project name"));
   if (!name) return;
-  const role = window.prompt(isEnglish() ? "Your role" : "你的角色", isEnglish() ? "Owner" : "主理人") || (isEnglish() ? "Owner" : "主理人");
-  const risk = window.prompt(isEnglish() ? "Current risk" : "当前风险", isEnglish() ? "None" : "暂无") || (isEnglish() ? "None" : "暂无");
-  const next = window.prompt(isEnglish() ? "Next action" : "下一步动作", isEnglish() ? "Add next step" : "补充下一步") || (isEnglish() ? "Add next step" : "补充下一步");
+  const role = window.prompt(uiText("Your role"), uiText("Owner")) || uiText("Owner");
+  const risk = window.prompt(uiText("Current risk"), uiText("None")) || uiText("None");
+  const next = window.prompt(uiText("Next action"), uiText("Add next step")) || uiText("Add next step");
   state.projects.unshift({ id: uid(), name: name.trim(), role: role.trim(), health: "黄", risk: risk.trim(), next: next.trim() });
   saveAndRender("项目已新增");
 }
@@ -1487,7 +1850,7 @@ function exportData() {
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
-  link.download = `${isEnglish() ? "early-rich-woman" : "早日成为富婆"}-${todayKey()}.json`;
+  link.download = `${currentLanguageMeta().exportName}-${todayKey()}.json`;
   link.click();
   URL.revokeObjectURL(url);
   toast("JSON 已导出");
@@ -1511,7 +1874,7 @@ function importData(event) {
 }
 
 function resetData() {
-  const confirmed = window.confirm(isEnglish() ? "Reset demo data? Current local data will be overwritten." : "确定重置为演示数据吗？当前本地数据会被覆盖。");
+  const confirmed = window.confirm(uiText("Reset demo data? Current local data will be overwritten."));
   if (!confirmed) return;
   state = createDefaultState();
   saveAndRender("已重置为演示数据");
@@ -1535,7 +1898,7 @@ function setTheme(themeId) {
   if (!validThemeIds.has(themeId)) return;
   state.appearance = { ...(state.appearance || {}), theme: themeId };
   applyTheme();
-  saveAndRender(isEnglish() ? `Theme switched to ${themeName(themeId)}` : `主题已切换为${themeName(themeId)}`);
+  saveAndRender(`${uiText("Theme switched to ")}${themeName(themeId)}`);
 }
 
 function applyTheme() {
@@ -1561,7 +1924,7 @@ function handleLanguageChoiceKey(event) {
 function setLanguage(languageId) {
   if (!validLanguageIds.has(languageId)) return;
   state.appearance = { ...(state.appearance || {}), language: languageId };
-  saveAndRender(languageId === "en" ? "Language switched to English" : "语言已切换为中文");
+  saveAndRender(languageId === "de" ? "Language switched to German" : "Language switched to English");
 }
 
 function currentLanguage() {
@@ -1569,8 +1932,20 @@ function currentLanguage() {
   return validLanguageIds.has(language) ? language : DEFAULT_LANGUAGE;
 }
 
-function isEnglish() {
-  return currentLanguage() === "en";
+function isGerman() {
+  return currentLanguage() === "de";
+}
+
+function uiText(english) {
+  return isGerman() ? enToDe[english] || english : english;
+}
+
+function currentLanguageMeta() {
+  return languageMeta[currentLanguage()] || languageMeta[DEFAULT_LANGUAGE];
+}
+
+function currentLocale() {
+  return currentLanguageMeta().locale;
 }
 
 function translateExact(value) {
@@ -1584,15 +1959,18 @@ function translateExact(value) {
 }
 
 function t(value) {
-  return isEnglish() ? zhToEn[value] || value : enToZh[value] || value;
+  const key = normalizeI18nKey(value);
+  const dictionary = languageDictionaries[currentLanguage()] || languageDictionaries[DEFAULT_LANGUAGE];
+  return dictionary[key] || (isGerman() ? enToDe[value] || value : value);
 }
 
 function normalizeI18nKey(text) {
-  return enToZh[text] || text;
+  return sourceByTranslation[text] || text;
 }
 
 function localizeI18nKey(key) {
-  return isEnglish() ? zhToEn[key] || key : key;
+  const dictionary = languageDictionaries[currentLanguage()] || languageDictionaries[DEFAULT_LANGUAGE];
+  return dictionary[key] || (isGerman() ? enToDe[key] || key : key);
 }
 
 function translateRememberedText(value, memo) {
@@ -1612,29 +1990,46 @@ function translateRememberedText(value, memo) {
 }
 
 function statusText(status) {
-  const labels = isEnglish()
-    ? { todo: "To Do", doing: "In Progress", done: "Done" }
-    : statusMap;
+  const labels = {
+    todo: t(statusMap.todo),
+    doing: t(statusMap.doing),
+    done: t(statusMap.done)
+  };
   return labels[status] || status;
 }
 
 function priorityText(priority) {
-  if (!isEnglish()) return priority;
-  return { "高": "High", "中": "Medium", "低": "Low" }[priority] || priority;
+  return { "高": t("高优先级").replace(/\s*priority$/i, "").replace(/\s*Priorität$/i, ""), "中": t("中优先级").replace(/\s*priority$/i, "").replace(/\s*Priorität$/i, ""), "低": t("低优先级").replace(/\s*priority$/i, "").replace(/\s*Priorität$/i, "") }[priority] || priority;
 }
 
 function priorityLabel(priority) {
-  return isEnglish() ? `${priorityText(priority)} priority` : `${priority}优先级`;
+  return t(`${priority}优先级`);
+}
+
+function targetMinutesLabel(minutes) {
+  return isGerman() ? `Ziel ${minutes} Min.` : `Target ${minutes} min`;
+}
+
+function rewardLabel(reward) {
+  return isGerman() ? `Belohnung: ${reward}` : `Reward: ${reward}`;
+}
+
+function focusMinutesNote(minutes) {
+  return isGerman() ? `Fokus ${minutes} Min.` : `Focus ${minutes} min`;
 }
 
 function countLabel(count, zhUnit, enUnit) {
-  return isEnglish() ? `${count} ${enUnit}${Number(count) === 1 ? "" : "s"}` : `${count} ${zhUnit}`;
+  if (isGerman()) {
+    if (zhUnit === "个任务") return `${count} ${Number(count) === 1 ? "Aufgabe" : "Aufgaben"}`;
+    if (zhUnit === "条") return `${count} ${Number(count) === 1 ? "Eintrag" : "Einträge"}`;
+  }
+  return `${count} ${enUnit}${Number(count) === 1 ? "" : "s"}`;
 }
 
 function applyLanguage() {
-  const language = currentLanguage();
-  document.documentElement.lang = language === "en" ? "en" : "zh-CN";
-  document.title = language === "en" ? "Early Rich Woman | work for tomorrow." : "早日成为富婆 | work for tomorrow.";
+  const meta = currentLanguageMeta();
+  document.documentElement.lang = meta.htmlLang;
+  document.title = meta.title;
   translateDomText(document.body);
   translateDomAttributes();
 }
@@ -1708,7 +2103,7 @@ function renderHome() {
   $("#sideFocus").textContent = formatMinutes(focus);
   $("#sideTasks").textContent = `${totalTasks - openTasks}/${totalTasks}`;
   $("#sideMeetings").textContent = meetings;
-  $("#workStateLabel").textContent = openCount > 0 ? (isEnglish() ? "Work session active" : "工作段进行中") : workMinutes > 0 ? (isEnglish() ? "Work recorded today" : "今日已有工作记录") : t("尚未开始工作");
+  $("#workStateLabel").textContent = openCount > 0 ? uiText("Work session active") : workMinutes > 0 ? uiText("Work recorded today") : t("尚未开始工作");
   $("#openLogBadge").textContent = openCount > 0 ? `${t("进行中")} ${openCount}` : t("待开工");
   $("#openLogBadge").className = `status-pill ${openCount > 0 ? "good" : "neutral"}`;
 
@@ -1740,11 +2135,11 @@ function renderRhythm() {
             <div class="stack-item focus-history-item">
               <div class="stack-item-head">
                 <div>
-                  <h3><i data-lucide="timer"></i> ${escapeHtml(item.title || (isEnglish() ? "Untitled focus" : "未命名专注"))}</h3>
+                  <h3><i data-lucide="timer"></i> ${escapeHtml(item.title || uiText("Untitled focus"))}</h3>
                   <p>${formatTime(item.startedAt)} - ${formatTime(item.endedAt)} · ${formatMinutes(item.minutes)}</p>
                   <div class="item-meta">
-                    ${item.targetMinutes ? `<span class="tag">${isEnglish() ? `Target ${item.targetMinutes} min` : `目标 ${item.targetMinutes} 分钟`}</span>` : ""}
-                    ${item.reward ? `<span class="tag ${item.rewardEarned ? "low" : "medium"}">${item.rewardEarned ? (isEnglish() ? "Reward unlocked" : "奖励已解锁") : (isEnglish() ? "Reward locked" : "奖励未解锁")}${isEnglish() ? ": " : "："}${escapeHtml(item.reward)}</span>` : ""}
+                    ${item.targetMinutes ? `<span class="tag">${targetMinutesLabel(item.targetMinutes)}</span>` : ""}
+                    ${item.reward ? `<span class="tag ${item.rewardEarned ? "low" : "medium"}">${item.rewardEarned ? uiText("Reward unlocked") : uiText("Reward locked")}: ${escapeHtml(item.reward)}</span>` : ""}
                   </div>
                 </div>
                 <button class="icon-btn" data-delete-id="${item.id}" aria-label="${t("删除专注记录")}" title="${t("删除专注记录")}"><i data-lucide="trash-2"></i></button>
@@ -1760,14 +2155,14 @@ function renderRhythm() {
     <div class="date-group">
       <div class="date-divider">
         <span>${escapeHtml(formatDayTitle(group.day))}</span>
-        <strong>${isEnglish() ? countLabel(group.items.length, "条", "item") : `${group.items.length} 条`}</strong>
+        <strong>${countLabel(group.items.length, "条", "item")}</strong>
       </div>
       <div class="stack-list">
         ${group.items.map((item) => {
           const icon = item.type === "in" ? "log-in" : item.type === "out" ? "log-out" : "umbrella";
           const title = item.type === "leave" ? t(item.note) : item.type === "in" ? t("开工") : t("收工");
           const pairClass = item.workPair ? ` work-pair-${item.workPair}` : "";
-          const pairLabel = item.workPair ? `${isEnglish() ? "Work session" : "工作段"} ${item.workPair}` : "";
+          const pairLabel = item.workPair ? `${uiText("Work session")} ${item.workPair}` : "";
           return `
             <div class="stack-item attendance-item${pairClass}" ${pairLabel ? `title="${escapeHtml(pairLabel)}"` : ""}>
               <div class="stack-item-head">
@@ -1852,7 +2247,7 @@ function workPairMapForDay(day) {
 
 function formatDayTitle(day) {
   const date = new Date(`${day}T12:00:00`);
-  const weekday = date.toLocaleDateString(isEnglish() ? "en-US" : "zh-CN", { weekday: "long" });
+  const weekday = date.toLocaleDateString(currentLocale(), { weekday: "long" });
   return `${day} ${weekday}`;
 }
 
@@ -1869,13 +2264,13 @@ function renderFocusTimer() {
   const targetMinutes = isLocked ? Number(timer.targetMinutes || 0) : clampFocusTarget($("#focusTargetMinutes").value);
   const reward = isLocked ? (timer.reward || "") : $("#focusReward").value.trim();
   const progress = targetMinutes ? Math.min(100, Math.floor((ms / (targetMinutes * 60000)) * 100)) : 0;
-  $("#focusState").textContent = timer.running ? t("进行中") : ms > 0 ? (isEnglish() ? "Paused" : "已暂停") : t("未开始");
+  $("#focusState").textContent = timer.running ? t("进行中") : ms > 0 ? uiText("Paused") : t("未开始");
   $("#focusState").className = `status-pill ${timer.running ? "good" : "neutral"}`;
   if (timer.title && !$("#focusTitle").value) $("#focusTitle").value = timer.title;
-  $("#focusGoalLabel").textContent = targetMinutes ? (isEnglish() ? `Target ${targetMinutes} min` : `目标 ${targetMinutes} 分钟`) : (isEnglish() ? "No target" : "未设置目标");
+  $("#focusGoalLabel").textContent = targetMinutes ? targetMinutesLabel(targetMinutes) : uiText("No target");
   $("#focusGoalProgress").textContent = `${progress}%`;
   $("#focusGoalBar").style.width = `${progress}%`;
-  $("#focusRewardPreview").textContent = reward ? (isEnglish() ? `Reward: ${reward}` : `达成奖励：${reward}`) : t("达成后给自己一个奖励");
+  $("#focusRewardPreview").textContent = reward ? rewardLabel(reward) : t("达成后给自己一个奖励");
 }
 
 function renderTasks() {
@@ -1922,7 +2317,7 @@ function isDailyTask(task, today = todayKey()) {
 
 function taskCard(task, options = {}) {
   const priority = priorityClass[task.priority] || "medium";
-  const dueLabel = task.due ? (isEnglish() ? `Due ${task.due}` : `截止 ${task.due}`) : (isEnglish() ? "No due date" : "未设截止");
+  const dueLabel = task.due ? `${uiText("Due")} ${task.due}` : uiText("No due date");
   const canPrev = task.status !== "todo";
   const canNext = task.status !== "done";
   return `
@@ -1940,11 +2335,11 @@ function taskCard(task, options = {}) {
       </div>
       <div class="tiny-actions">
         ${options.showTodayAction && task.status !== "done" ? `<button data-task-action="today" data-id="${task.id}">${escapeHtml(t("加入今日"))}</button>` : ""}
-        ${canPrev ? `<button data-task-action="prev" data-id="${task.id}">${isEnglish() ? "Previous" : "前一列"}</button>` : ""}
-        ${canNext ? `<button data-task-action="next" data-id="${task.id}">${isEnglish() ? "Next" : "后一列"}</button>` : ""}
+        ${canPrev ? `<button data-task-action="prev" data-id="${task.id}">${uiText("Previous")}</button>` : ""}
+        ${canNext ? `<button data-task-action="next" data-id="${task.id}">${uiText("Next")}</button>` : ""}
         ${task.status !== "done" ? `<button data-task-action="done" data-id="${task.id}">${t("完成")}</button>` : ""}
-        <button data-task-action="edit" data-id="${task.id}">${isEnglish() ? "Edit" : "编辑"}</button>
-        <button data-task-action="delete" data-id="${task.id}">${isEnglish() ? "Delete" : "删除"}</button>
+        <button data-task-action="edit" data-id="${task.id}">${uiText("Edit")}</button>
+        <button data-task-action="delete" data-id="${task.id}">${uiText("Delete")}</button>
       </div>
     </div>
   `;
@@ -2313,12 +2708,12 @@ function formatSlotDuration(slots) {
   const minutes = Math.max(0, Math.round(Number(slots || 0))) * DAY_PLAN_SLOT_MINUTES;
   const hours = Math.floor(minutes / 60);
   const rest = minutes % 60;
-  if (isEnglish()) {
-    if (minutes < 60) return `${minutes} min`;
-    return rest ? `${hours} hr ${rest} min` : `${hours} hr`;
+  if (isGerman()) {
+    if (minutes < 60) return `${minutes} Min.`;
+    return rest ? `${hours} Std. ${rest} Min.` : `${hours} Std.`;
   }
-  if (minutes < 60) return `${minutes} 分钟`;
-  return rest ? `${hours} 小时 ${rest} 分钟` : `${hours} 小时`;
+  if (minutes < 60) return `${minutes} min`;
+  return rest ? `${hours} hr ${rest} min` : `${hours} hr`;
 }
 
 function renderMeetings() {
@@ -2333,10 +2728,10 @@ function renderMeetings() {
             <span class="tag">${formatDateTime(meeting.when)}</span>
           </div>
         </div>
-        <button class="icon-btn" data-delete-id="${meeting.id}" aria-label="${isEnglish() ? "Delete meeting" : "删除会议"}" title="${isEnglish() ? "Delete meeting" : "删除会议"}"><i data-lucide="trash-2"></i></button>
+        <button class="icon-btn" data-delete-id="${meeting.id}" aria-label="${uiText("Delete meeting")}" title="${uiText("Delete meeting")}"><i data-lucide="trash-2"></i></button>
       </div>
-      <p>${escapeHtml(meeting.decision || (isEnglish() ? "No decision" : "暂无结论"))}</p>
-      ${(meeting.contacts || []).length ? `<div class="item-meta">${meeting.contacts.map((contact) => `<span class="tag">${isEnglish() ? "Contact: " : "联系人："}${escapeHtml(contact)}</span>`).join("")}</div>` : ""}
+      <p>${escapeHtml(meeting.decision || uiText("No decision"))}</p>
+      ${(meeting.contacts || []).length ? `<div class="item-meta">${meeting.contacts.map((contact) => `<span class="tag">${uiText("Contact: ")}${escapeHtml(contact)}</span>`).join("")}</div>` : ""}
       <div class="item-meta">${(meeting.actions || []).map((action) => `<span class="tag">${escapeHtml(action)}</span>`).join("")}</div>
     </div>
   `).join("") || empty("暂无会议记录");
@@ -2349,9 +2744,9 @@ function renderMeetingContacts(selected = getSelectedMeetingContacts()) {
     <label class="contact-check">
       <input type="checkbox" value="${escapeHtml(contact)}" data-meeting-contact ${selectedSet.has(contact) ? "checked" : ""}>
       <span>${escapeHtml(contact)}</span>
-      <button type="button" data-contact-delete="${escapeHtml(contact)}" aria-label="${isEnglish() ? "Delete frequent contact" : "删除常用联系人"} ${escapeHtml(contact)}" title="${isEnglish() ? "Delete frequent contact" : "删除常用联系人"}"><i data-lucide="x"></i></button>
+      <button type="button" data-contact-delete="${escapeHtml(contact)}" aria-label="${uiText("Delete frequent contact")} ${escapeHtml(contact)}" title="${uiText("Delete frequent contact")}"><i data-lucide="x"></i></button>
     </label>
-  `).join("") : `<div class="empty compact">${isEnglish() ? "Add frequent contacts to select them quickly" : "添加常用联系人后可直接勾选"}</div>`;
+  `).join("") : `<div class="empty compact">${uiText("Add frequent contacts to select them quickly")}</div>`;
 }
 
 function renderReview() {
@@ -2379,14 +2774,14 @@ function renderReview() {
             <div class="item-meta"><span class="tag low">${escapeHtml(moodText(review.score))} · ${review.score}/5</span></div>
           </div>
           <div class="stack-actions">
-            <button class="icon-btn" data-review-edit="${review.id}" aria-label="${isEnglish() ? "Edit review" : "编辑复盘"}" title="${isEnglish() ? "Edit review" : "编辑复盘"}"><i data-lucide="square-pen"></i></button>
-            <button class="icon-btn" data-delete-id="${review.id}" aria-label="${isEnglish() ? "Delete review" : "删除复盘"}" title="${isEnglish() ? "Delete review" : "删除复盘"}"><i data-lucide="trash-2"></i></button>
+            <button class="icon-btn" data-review-edit="${review.id}" aria-label="${uiText("Edit review")}" title="${uiText("Edit review")}"><i data-lucide="square-pen"></i></button>
+            <button class="icon-btn" data-delete-id="${review.id}" aria-label="${uiText("Delete review")}" title="${uiText("Delete review")}"><i data-lucide="trash-2"></i></button>
           </div>
         </div>
-        <p><strong>${isEnglish() ? "Wins: " : "成果："}</strong>${escapeHtml(review.wins || (isEnglish() ? "None" : "暂无"))}</p>
-        <p><strong>${isEnglish() ? "Risks: " : "风险："}</strong>${escapeHtml(review.risks || (isEnglish() ? "None" : "暂无"))}</p>
-        <p><strong>${isEnglish() ? "Tomorrow: " : "明日："}</strong>${escapeHtml(review.tomorrow || (isEnglish() ? "None" : "暂无"))}</p>
-        ${review.moodReason ? `<p><strong>${isEnglish() ? "Reason: " : "原因："}</strong>${escapeHtml(review.moodReason)}</p>` : ""}
+        <p><strong>${uiText("Wins: ")}</strong>${escapeHtml(review.wins || uiText("None"))}</p>
+        <p><strong>${uiText("Risks: ")}</strong>${escapeHtml(review.risks || uiText("None"))}</p>
+        <p><strong>${uiText("Tomorrow: ")}</strong>${escapeHtml(review.tomorrow || uiText("None"))}</p>
+        ${review.moodReason ? `<p><strong>${uiText("Reason: ")}</strong>${escapeHtml(review.moodReason)}</p>` : ""}
       </div>
     `).join("") || empty("暂无复盘记录");
 }
@@ -2415,25 +2810,25 @@ function renderThemeSettings() {
 
 function themeName(themeId) {
   const theme = themeOptions.find((item) => item.id === themeId);
-  if (!theme) return isEnglish() ? "Minimal Black" : "简约黑色";
-  return isEnglish() ? theme.nameEn : theme.name;
+  if (!theme) return isGerman() ? "Minimal Schwarz" : "Minimal Black";
+  return isGerman() ? theme.nameDe : theme.nameEn;
 }
 
 function themeNote(themeId) {
   const theme = themeOptions.find((item) => item.id === themeId);
   if (!theme) return "";
-  return isEnglish() ? theme.noteEn : theme.note;
+  return isGerman() ? theme.noteDe : theme.noteEn;
 }
 
 function renderLanguageSettings() {
   const language = currentLanguage();
   const current = languageOptions.find((item) => item.id === language) || languageOptions[0];
-  $("#currentLanguageName").textContent = isEnglish() ? current.nameEn : current.name;
+  $("#currentLanguageName").textContent = current.name;
   $("#languageChoiceList").innerHTML = languageOptions.map((item) => `
     <button class="language-card ${item.id === language ? "is-selected" : ""}" type="button" data-language-choice="${item.id}" role="radio" aria-checked="${item.id === language}">
-      <span>${item.id === "zh" ? "中" : "EN"}</span>
-      <strong>${isEnglish() ? item.nameEn : item.name}</strong>
-      <small>${isEnglish() ? item.noteEn : item.note}</small>
+      <span>${item.shortName}</span>
+      <strong>${item.name}</strong>
+      <small>${item.note}</small>
     </button>
   `).join("");
 }
@@ -2618,7 +3013,7 @@ function drawLegend(ctx, items, x) {
 }
 
 function drawHourAxis(ctx, left, top, width, height, maxMinutes) {
-  const unit = isEnglish() ? "hr" : "小时";
+  const unit = isGerman() ? "Std." : "hr";
   const ticks = [maxMinutes, Math.round(maxMinutes / 2), 0];
   const x = left + width + 8;
   ctx.fillStyle = "#697386";
@@ -2707,7 +3102,7 @@ function hideChartTooltip() {
 
 function tickClock() {
   const now = new Date();
-  const locale = isEnglish() ? "en-US" : "zh-CN";
+  const locale = currentLocale();
   $("#currentDate").textContent = now.toLocaleDateString(locale, { year: "numeric", month: "long", day: "numeric", weekday: "long" });
   $("#currentTime").textContent = now.toLocaleTimeString(locale, { hour: "2-digit", minute: "2-digit", second: "2-digit" });
 }
@@ -2727,7 +3122,7 @@ function buildTimeline(day) {
 
   const focus = state.focusSessions
     .filter((item) => dateKey(new Date(item.startedAt)) === day)
-    .map((item) => ({ at: item.startedAt, title: item.title, note: isEnglish() ? `Focus ${item.minutes} min` : `专注 ${item.minutes} 分钟` }));
+    .map((item) => ({ at: item.startedAt, title: item.title, note: focusMinutesNote(item.minutes) }));
 
   return [...logs, ...meetings, ...focus].sort((a, b) => new Date(a.at) - new Date(b.at));
 }
@@ -2900,16 +3295,16 @@ function todayKey() {
 }
 
 function formatMinutes(minutes) {
-  if (isEnglish()) {
-    if (minutes < 60) return `${minutes} min`;
+  if (isGerman()) {
+    if (minutes < 60) return `${minutes} Min.`;
     const hours = Math.floor(minutes / 60);
     const rest = minutes % 60;
-    return rest ? `${hours} hr ${rest} min` : `${hours} hr`;
+    return rest ? `${hours} Std. ${rest} Min.` : `${hours} Std.`;
   }
-  if (minutes < 60) return `${minutes} 分钟`;
+  if (minutes < 60) return `${minutes} min`;
   const hours = Math.floor(minutes / 60);
   const rest = minutes % 60;
-  return rest ? `${hours} 小时 ${rest} 分钟` : `${hours} 小时`;
+  return rest ? `${hours} hr ${rest} min` : `${hours} hr`;
 }
 
 function formatDuration(ms) {
@@ -2921,12 +3316,12 @@ function formatDuration(ms) {
 }
 
 function formatTime(value) {
-  return new Date(value).toLocaleTimeString(isEnglish() ? "en-US" : "zh-CN", { hour: "2-digit", minute: "2-digit" });
+  return new Date(value).toLocaleTimeString(currentLocale(), { hour: "2-digit", minute: "2-digit" });
 }
 
 function formatDateTime(value) {
   const date = new Date(value);
-  const locale = isEnglish() ? "en-US" : "zh-CN";
+  const locale = currentLocale();
   return `${date.toLocaleDateString(locale, { month: "2-digit", day: "2-digit" })} ${date.toLocaleTimeString(locale, { hour: "2-digit", minute: "2-digit" })}`;
 }
 
