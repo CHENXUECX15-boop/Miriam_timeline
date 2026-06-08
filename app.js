@@ -44,7 +44,7 @@ const DAY_PLAN_SLOTS_PER_HOUR = 60 / DAY_PLAN_SLOT_MINUTES;
 const DAY_PLAN_TOTAL_SLOTS = 24 * DAY_PLAN_SLOTS_PER_HOUR;
 const DAY_PLAN_ROW_HOURS = 8;
 const DAY_PLAN_ROW_SLOTS = DAY_PLAN_ROW_HOURS * DAY_PLAN_SLOTS_PER_HOUR;
-const DAY_PLAN_ROW_RANGES = Array.from({ length: 3 }, (_, index) => ({
+const DAY_PLAN_ROW_RANGES = [1, 2].map((index) => ({
   index,
   startSlot: index * DAY_PLAN_ROW_SLOTS,
   endSlot: (index + 1) * DAY_PLAN_ROW_SLOTS
